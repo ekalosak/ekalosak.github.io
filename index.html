@@ -4,6 +4,16 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+        <!-- Styling for the distributed computing d3.js applet -->
+        <style>
+            body { background: #000; }
+            ellipse { fill: #fff; }
+            path { fill: none; stroke: #fff; stroke-linecap: round; }
+            .mid { stroke-width: 4px; }
+            .tail { stroke-width: 2px; }
+        </style>
+
         <title>Eric Kalosa-Kenyon</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,6 +39,9 @@
          <!-- Latest compiled JavaScript -->
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
          </script>
+
+         <!-- d3js -->
+         <script src="https://d3js.org/d3.v4.js"></script>
 
     </head>
 
@@ -83,16 +96,19 @@
                     <h2>Mathematical Statistics</h2>
                     <h2>University of California, Davis</h2>
                     <p>The world's human population is
-                    <a href="https://esa.un.org/unpd/wpp/Publications/Files/World_Population_2015_Wallchart.pdf">
-                    expected to grow past 9.7*10^9 by 2050</a>, and our global
+                    <a
+                        href="https://esa.un.org/unpd/wpp/Publications/Files/World_Population_2015_Wallchart.pdf">
+                        expected to grow</a>
+                    <a
+                        href="http://science.sciencemag.org/content/346/6206/234">
+                        past 9.7*10^9 by 2050</a>, and our global
                     temperature is expected to increase by 2C in the same time
                     frame. I'm interested in technologies that prepare us for
                     climate change and the demands of a growing world.
-
-                    <br> <br>
                 </div>
-
             </div>
+
+
         </div>
         </div>
 

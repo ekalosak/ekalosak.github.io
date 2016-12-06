@@ -20,10 +20,15 @@
     <script>
         var ppp = 100, // pixels per plot, they are square
             wplot = 5, // number of plots wide
-            hplot = 8,
+            hplot = 7,
             marg = 3, // pixel margin between plots
             width = wplot*(marg + ppp), // pixel width of the applet
-            height = hplot*(marg + ppp);
+            height = hplot*(marg + ppp),
+            noGrowthColor = "white", // color of plots before any growth
+            fullGrowthColor = "green",
+            period = 365, // number of days over which growth occurs, see the
+                        // weather creation and growth paragraph for more detail
+            sleepTime = 200; // miliseconds between each day in the display
 
         // Initialize w*h plots with no growth
         var plots = [],
@@ -39,6 +44,7 @@
         };
 
         // Initialize plots on screen
+        // using https://www.dashingd3js.com/dynamic-svg-coordinate-space
         var jsonRectangles = [];
         for (var i = 0; i < plots.length; i++) {
             var p = plots[i];
@@ -47,7 +53,7 @@
                 "y_axis": p["y"],
                 "height": ppp,
                 "width" : ppp,
-                "color" : "green"
+                "color" : noGrowthColor
             };
             jsonRectangles[jsonRectangles.length] = plotRec;
         }
@@ -62,17 +68,48 @@
                                      .append("rect");
 
         var rectangleAttributes = rectangles
-                                  .attr("x", function (d) { return d.x_axis; })
-                                  .attr("y", function (d) { return d.y_axis; })
-                                  .attr("height", function (d) { return d.height;
-            })
-                                  .attr("width", function (d) { return d.width; })
-                                  .style("fill", function(d) { return d.color; });
+                          .attr("x", function (d) { return d.x_axis; })
+                          .attr("y", function (d) { return d.y_axis; })
+                          .attr("height", function (d) { return d.height; })
+                          .attr("width", function (d) { return d.width; })
+                          .style("fill", function(d) { return d.color; });
 
         // Fake some weather data (time series sunshine or w.e)
+        var sunshine = [];
+        for (var i = 0; i < period; i++) { // period is defined at the top
+            sunshine[i] = Math.sin(i * Math.PI / period) + Math.random() / 10;
+        }
+
         // Plant response to weather is Markov function of biomass and weather
-        //      which is totally not true but I want a prototype
-        // Plot plant response over time as color
+        //      which is totally not true but I want a prototype.
+        //      Plot plant response over time as color at each time step
+        //      http://www.jeromecukier.net/blog/2011/08/11/d3-scales-and-color/
+        //      http://stackoverflow.com/questions/16839042/gradient-color-in-a-treemap-for-d3
+        var maxBiomass = sunshine.reduce(function(a, b){ return a + b}) // sum
+            colorScale = d3.scale.linear().domain(
+                [0, maxBiomass]).range(
+                [noGrowthColor, fullGrowthColor]);
+
+        function updatePlotColors() {
+            // d3.selectAll("rect").style("fill", colorScale(150))
+            rectangleAttributes = rectangles
+                    .style("fill", function(d) { return colorScale(d.value)});
+            console.log("here");
+        }
+
+        // for each day, update all plots, then update the screen
+        for (var d = 0; d < period; d++) {
+            for (var p = 0; p < nplot; p++) {
+                plots[p]["biomass"] = plots[p]["biomass"] + sunshine[d] +
+                    Math.random() / 10;
+                if (plots[p]["biomass"] > maxBiomass) {
+                    plots[p]["biomass"] = maxBiomass;
+                }
+            }
+            // update screen with new colors
+            setTimeout(updatePlotColors, d*sleepTime);
+        }
+
 
     </script>
 </body>

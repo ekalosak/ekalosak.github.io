@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<!-- Show a feild of crop growing over a season in response to weather
+    conditions -->
+<meta charset="utf-8">
+
+<style>
+    body {
+      background: #000;
+    }
+</style>
+
+<!-- NOTE: for plotting time series, check out http://metricsgraphicsjs.org/ -->
+
+<!-- Show growth of crops at each location over time in a simulation -->
+<!-- Goal is to show growth of crops across planet over long time scales over
+    multiple climate regimes -->
+<body>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+        var ppp = 100, // pixels per plot, they are square
+            wplot = 5, // number of plots wide
+            hplot = 8,
+            marg = 3, // pixel margin between plots
+            width = wplot*(marg + ppp), // pixel width of the applet
+            height = hplot*(marg + ppp);
+
+        // Initialize w*h plots with no growth
+        var plots = [],
+            nplot = wplot*hplot;
+        for (var i = 0; i < nplot; i++) {
+            // Need to show their x and y
+            var plot = {
+                "x" : (i % wplot) * (ppp + marg),
+                "y" : (Math.floor(i / wplot)) * (ppp + marg),
+                "biomass" : 0
+            };
+            plots[plots.length] = plot;
+        };
+
+        // Initialize plots on screen
+        var jsonRectangles = [];
+        for (var i = 0; i < plots.length; i++) {
+            var p = plots[i];
+            var plotRec = {
+                "x_axis": p["x"],
+                "y_axis": p["y"],
+                "height": ppp,
+                "width" : ppp,
+                "color" : "green"
+            };
+            jsonRectangles[jsonRectangles.length] = plotRec;
+        }
+
+        var svgContainer = d3.select("body").append("svg")
+                                    .attr("width", width)
+                                    .attr("height", height);
+
+        var rectangles = svgContainer.selectAll("rect")
+                                     .data(jsonRectangles)
+                                     .enter()
+                                     .append("rect");
+
+        var rectangleAttributes = rectangles
+                                  .attr("x", function (d) { return d.x_axis; })
+                                  .attr("y", function (d) { return d.y_axis; })
+                                  .attr("height", function (d) { return d.height;
+            })
+                                  .attr("width", function (d) { return d.width; })
+                                  .style("fill", function(d) { return d.color; });
+
+        // Fake some weather data (time series sunshine or w.e)
+        // Plant response to weather is Markov function of biomass and weather
+        //      which is totally not true but I want a prototype
+        // Plot plant response over time as color
+
+    </script>
+</body>

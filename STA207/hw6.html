@@ -143,6 +143,8 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#section-3">14.20</a><ul>
 <li><a href="#a-3">14.20.a</a></li>
+<li><a href="#b-3">14.20.b</a></li>
+<li><a href="#c-3">14.20.c</a></li>
 </ul></li>
 <li><a href="#section-4">14.22</a></li>
 <li><a href="#section-5">14.40</a></li>
@@ -269,7 +271,27 @@ fit = with(df,
 <h1>14.20</h1>
 <div id="a-3" class="section level2">
 <h2>14.20.a</h2>
-<pre class="r"><code>df = read.xls(&quot;PR14.14.xlsx&quot;, sheet = 1, header = TRUE)</code></pre>
+<pre class="r"><code>df = read.xls(&quot;PR14.14.xlsx&quot;, sheet = 1, header = TRUE)
+fit = with(df,
+    glm(formula = Flu.shot ~ Age + Awareness + Gender,
+    family = binomial))
+fit.sum = summary(fit)
+cc = fit.sum$coefficients
+alp = 0.1
+m = qnorm(alp/2)
+ci1 = c(exp(cc[2,1]*30+m*cc[2,2]), exp(cc[2,1]*30-m*cc[2,2]))
+ci2 = c(exp(cc[3,1]*25+m*cc[3,2]), exp(cc[3,1]*25-m*cc[3,2]))</code></pre>
+<p>The first confidence interval is 8.445793, 9.3335238, and the second is 0.0796806, 0.0889576.</p>
+</div>
+<div id="b-3" class="section level2">
+<h2>14.20.b</h2>
+<pre class="r"><code>ze = cc[4,1]/cc[4,2]
+alp = 0.05
+zt = qnorm(1-alp/2)</code></pre>
+<p><span class="math inline">\(H_0: \beta_k=0\)</span> and <span class="math inline">\(H_a: \beta_k\ne 0\)</span>. We reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(z^*=\frac{b_k}{s(b_k)}\ge z(1-\frac{\alpha}{2})\)</span>. Here, <span class="math inline">\(z^*=1.959964\)</span> and <span class="math inline">\(z_\alpha=0.8316976\)</span> so we reject <span class="math inline">\(H_0\)</span> and conclude that the gender coefficient is nonzero.</p>
+</div>
+<div id="c-3" class="section level2">
+<h2>14.20.c</h2>
 </div>
 </div>
 <div id="section-4" class="section level1">

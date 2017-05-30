@@ -132,7 +132,7 @@ $(document).ready(function () {
 <h4 class="date"><em>30 May 2017</em></h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
-In this assignment, we fit a cubic penalized regression spline using four different methods for obtaining a smoothing parameter.
+In this assignment, I fit a cubic penalized regression spline using four different methods for obtaining a smoothing parameter.
 </div>
 
 </div>
@@ -409,9 +409,9 @@ plt_aicc = ggplot(data=aicc_df) +
 <ol style="list-style-type: decimal">
 <li><span class="math inline">\(risk(\lambda) = E(||y-e-\hat{f}_\lambda||^2)\)</span> by the model assumption <span class="math inline">\(y=f+e\)</span>.</li>
 <li>Expanding the <span class="math inline">\(L_2\)</span> norm in the expression above, using the linearity of expectation, and noting the fact that <span class="math inline">\(E(e)=0\)</span>; <span class="math inline">\(E(||y-e-\hat{f}_\lambda|||^2) = E(y^\top y - y^\top \hat{f}_\lambda + e^\top e - \hat{f}_\lambda^\top y + \hat{f}_\lambda^\top \hat{f}_\lambda)\)</span></li>
-<li>Consolidating terms in (2), <span class="math inline">\(risk(\lambda) =  n\sigma^2 + E(||y-\hat{f}_\lambda||^2)\)</span> and we use the method of moments to create an unbiased estimator when <span class="math inline">\(\sigma^2\)</span> is known.</li>
+<li>Consolidating terms in (2), <span class="math inline">\(risk(\lambda) = n\sigma^2 + E(||y-\hat{f}_\lambda||^2)\)</span> and I use the method of moments to create an unbiased estimator when <span class="math inline">\(\sigma^2\)</span> is known.</li>
 </ol>
-<p><span class="math inline">\(y\)</span> are the noisy observations, <span class="math inline">\(\hat{f}_\lambda = H_\lambda y\)</span> where <span class="math inline">\(H_\lambda\)</span> depends only on <span class="math inline">\(X\)</span>, and we can create an estimator for <span class="math inline">\(\sigma^2\)</span>: <span class="math inline">\(\hat{\sigma^2} \approx RSS(\hat{f}_\lambda) = \frac{1}{n} ||y-\hat{f}_\lambda||^2\)</span>. Using this estimator for <span class="math inline">\(\sigma^2\)</span>, the estimator for <span class="math inline">\(E(||f-\hat{f}_\lambda||^2)\)</span> is proportional to <span class="math inline">\(||y-\hat{f}_\lambda||^2\)</span>.</p>
+<p><span class="math inline">\(y\)</span> are the noisy observations, <span class="math inline">\(\hat{f}_\lambda = H_\lambda y\)</span> where <span class="math inline">\(H_\lambda\)</span> depends only on <span class="math inline">\(X\)</span>, and one can create an estimator for <span class="math inline">\(\sigma^2\)</span>: <span class="math inline">\(\hat{\sigma^2} \approx RSS(\hat{f}_\lambda) = \frac{1}{n} ||y-\hat{f}_\lambda||^2\)</span>. Using this estimator for <span class="math inline">\(\sigma^2\)</span>, the estimator for <span class="math inline">\(E(||f-\hat{f}_\lambda||^2)\)</span> is proportional to <span class="math inline">\(||y-\hat{f}_\lambda||^2\)</span>.</p>
 <p>An alternative estimator for the risk, using classical pilots, is given in section 2.2.1 of Lee (2003): use <span class="math inline">\(\hat{f}_{\lambda_p} \approx f\)</span> where <span class="math inline">\(\lambda_p\)</span> is the <span class="math inline">\(CV\)</span> parameter. This is the method I employ in my algorithm.</p>
 <p>The following algorithm exhibits this risk estimator minimization criterion for calculating the penalty parameter <span class="math inline">\(\lambda\)</span> for a single experimental simulation parameterization.</p>
 <pre class="r"><code>sighat = function(Y=Y, X=X, k=k, l){

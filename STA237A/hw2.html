@@ -11,7 +11,7 @@
 
 <meta name="author" content="Eric Kalosa-Kenyon" />
 
-<meta name="date" content="2017-10-08" />
+<meta name="date" content="2017-10-09" />
 
 <title>STA237A Hw2</title>
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">STA237A Hw2</h1>
 <h4 class="author"><em>Eric Kalosa-Kenyon</em></h4>
-<h4 class="date"><em>08 October 2017</em></h4>
+<h4 class="date"><em>09 October 2017</em></h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 In this assignment, two short proofs of behaviors of basic time series objects are presented.
@@ -189,6 +189,7 @@ In this assignment, two short proofs of behaviors of basic time series objects a
 <p>In this section, I check the MSE of <span class="math inline">\(\hat{X}_{n+1}\)</span>. <span class="math display">\[MSE(\hat{X}) = Bias(\hat{X})^2 + Var(\hat{X})\]</span> <span class="math inline">\(Bias(\hat{X}_{n+1}) = E(X_{n+1}-\hat{X}_{n+1}) =  0 + \sum_{j=1}^\infty \theta^j (E(Z_{n+1-j}) - \theta E(Z_{n-j})) = 0\)</span></p>
 <p><span class="math inline">\(Var(\hat{X}_{n+1}) = E((\hat{X}_{n+1} - E(\hat{X}_{n+1}))^2) =  E((\hat{X}_{n+1})^2) = E(Z_{n+1}^2) + \theta^2 E(Z_n^2) =  \sigma^2 (1 + \theta^2)\)</span></p>
 <p><span class="math inline">\(MSE(\hat{X}_{n+1}) = \sigma^2 (1 + \theta^2)\)</span></p>
+<p>Notice that if we condtion on the previous observations <span class="math inline">\(X_{n}, \dots\)</span>, the <span class="math inline">\(MSE\)</span> reduces to simply the variance of <span class="math inline">\(Z_n\)</span> i.e. <span class="math inline">\(MSE(\hat{X}_{n+1} | X_n, \dots) = \sigma^2\)</span>.</p>
 </div>
 </div>
 

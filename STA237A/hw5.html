@@ -11,7 +11,7 @@
 
 <meta name="author" content="Eric Kalosa-Kenyon" />
 
-<meta name="date" content="2017-10-17" />
+<meta name="date" content="2017-10-18" />
 
 <title>STA237A Hw5</title>
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">STA237A Hw5</h1>
 <h4 class="author"><em>Eric Kalosa-Kenyon</em></h4>
-<h4 class="date"><em>17 October 2017</em></h4>
+<h4 class="date"><em>18 October 2017</em></h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 In this assignment, a proof of nonsingularity of the covariance matrix for weakly stationary time series under gentle assumptions is presented.
@@ -160,7 +160,7 @@ In this assignment, a proof of nonsingularity of the covariance matrix for weakl
 <li>As a covariance function, <span class="math inline">\(\gamma(h)\)</span> generates a positive semi-definite covariance matrix <span class="math inline">\(\Gamma_n\)</span> by Theorem 1.5.1 (Brockwell &amp; Davis 2nd ed p27).</li>
 <li>In fact, this matrix is positive definite when <span class="math inline">\(\gamma(0)&gt;0\)</span> as is assumed here and the property that <span class="math inline">\(|\gamma(h)|\le\gamma(0)\)</span> for all. If this is not immediately clear, consider the Cholesky factorization <span class="math inline">\(A=L^\top L\)</span> and notice that the <span class="math inline">\(\gamma(0)&gt;0\)</span> criterion forces the diagonal entries <span class="math inline">\(L_{i,i}&gt;0\)</span>.</li>
 <li>Positive semi-definite matricies are factorizable as <span class="math inline">\(\Gamma_n = P \Lambda P^{-1}\)</span> for unitary <span class="math inline">\(P\)</span> and diagonal <span class="math inline">\(\Lambda\)</span>. Note that <span class="math inline">\(\gamma(h)\rightarrow 0\)</span> forces the diagonal entries of <span class="math inline">\(\Lambda\)</span> to be greater than <span class="math inline">\(0\)</span>.</li>
-<li>The inverse <span class="math inline">\(\Gamma_n^{-1} = (P \Lambda P^{-1})^{-1} = P^{-1}\Lambda^{-1}P\)</span>.</li>
+<li>The inverse <span class="math inline">\(\Gamma_n^{-1} = (P \Lambda P^{-1})^{-1} = P\Lambda^{-1}P^{-1}\)</span>.</li>
 </ol>
 </div>
 

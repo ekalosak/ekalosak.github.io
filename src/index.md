@@ -1,6 +1,16 @@
 # Everything's a graph
 
+Welcome to my blog.
 
-## Blog posts
+# Use panda3d instead of pygame in openai/gym
+Wed 28, 2022
 
-- [Test](https://ekalosak.github.io/blog/test.html)
+```python
+class MyBase(panda3d.ShowBase):
+  ...
+
+class Env:
+  def render():
+    if mode == human:
+      self.window = My
+```

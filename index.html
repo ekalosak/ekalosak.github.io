@@ -6,6 +6,36 @@
 
 My name's Eric. Welcome to my blog. Hopefully you find some amusement or insight.
 
+<h2 id="2022-10-02">October 2, 2022</h3>
+<p>
+The Game of Life can be played on a graph, specifically a <code>nx.watts_strogatz_graph(30, 8, 0.1)</code>:
+<br><br>
+<img
+  src="static/gol_graph.gif"
+  alt="game of life on a tutte graph"
+  width="400"
+/>
+<br><br>
+The Game of Life has few rules:
+<ul>
+<li>live nodes with 2 or 3 live neighbors live to the next step</li>
+<li>dead nodes with 3 live neighbors spring to life in the next step</li>
+<li>all other nodes die in the next step</li>
+</ul>
+Harsh, but principled.
+<br><br>
+
+Although it's typically played on a 2D infinite grid, there's no reason the rules can't generalize.
+<br><br>
+Try it yourself: <code>python -m nx3d life nogui watt</code><br>Requires nx3d 22.10.4 or greater.
+<br><br>
+Related work:
+<ul>
+<li>https://arxiv.org/abs/2111.01780</li>
+</ul>
+
+</p>
+
 <h2 id="2022-10-01">October 1, 2022</h3>
 
 <p>

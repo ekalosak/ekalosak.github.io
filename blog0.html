@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <title>Everything&#39;s a graph</title>
+  </head>
+<body>
+<p>
+date: October 1, 2022
+</p>
+
+<h2><a href="index.html">Everything's a graph</a></h2>
+
+<h3>Announcing ... nx3d</h3>
+
+<p>
+This one's for you, Leah <3
+<br><br>
+
+<img
+  src="https://raw.githubusercontent.com/ekalosak/nx3d/main/docs/data/watt_diffusion.gif"
+  alt="diffusion on a graph"
+  class="center"
+/>
+<br><br>
+
+I'm writing to announce nx3d's 22.10.3 release.
+If you want to get started immediately, you can replicate the GIF above by running the following from your command line:
+<br><br>
+
+<code>
+pip install nx3d && python -m nx3d diffusion nolabel watt
+</code>
+<br>
+
+<ul>
+<li>language: python3, 3.9, 3.10, 3.11</li>
+<li>license: MIT</li>
+<li>depends: loguru, networkx, numpy, panda3d</li>
+<li>repository: <a href="https://github.com/ekalosak/nx3d">github</a></li>
+<li>package: <a href="https://pypi.org/project/nx3d/">pypi</a></li>
+<li>documentation: <a href="https://nx3d.readthedocs.io/en/latest/">readthedocs</a></li>
+</ul>
+
+What you're looking at here is a diffusion process over a Watts-Strogatz graph. Specifically, it's a Watts-Strogatz
+graph generated stochastically by the networkx package using: <code>g = nx.watts_strogatz_graph(30, 3, 0.1)</code>.
+<br>
+You'll notice, if you can look past the spinning, that the colors of each node diffuse over time to neighboring nodes,
+"smoothing out" the colors. My implementation of diffusion is a dead simple Markov process on the nodes' RGB values -
+the color at each time step is the color at the previous step plus a small fraction of the nodes' neighbors.
+<br><br>
+
+You can do more with nx3d than just diffusion, though - here's a finite implementation of the Game of Life:<br>
+<img
+  src="https://raw.githubusercontent.com/ekalosak/nx3d/main/docs/data/gol.gif"
+  alt="game of life on a grid"
+  class="center"
+/>
+<br><br>
+
+These examples aren't interactive - they're zero-player games after all. But you can make interactive visualizations
+with nx3d. Here's the popular mobile game 2048 implemented on a gridded graph:<br>
+<img
+  src="static/2048.gif"
+  alt="2048 on a grid"
+  class="center"
+/>
+
+<br><br>
+nx3d is built on a real 3D game engine, so you can get about as creative as you want. There's keyboard
+feedback built in to the latest version to get up and running with your own interactive visualizations. And that's about
+it, really - check out the docs for more info and happy hacking!
+
+</p>
+
+</body>
+</html>

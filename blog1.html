@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <title>Everything&#39;s a graph</title>
+  </head>
+<body>
+
+<h2><a href="index.html">Everything's a graph</a></h2>
+<p>
+date: October 2, 2022
+</p>
+
+<h3>A non-Euclidean Game of Life</h3>
+<p>
+The Game of Life can be played on a graph, specifically a <code>nx.watts_strogatz_graph(30, 8, 0.1)</code>:
+<br><br>
+<img
+  src="static/gol_graph.gif"
+  alt="game of life on a tutte graph"
+  class="center"
+/>
+<br><br>
+The Game of Life has few rules:
+<ul>
+<li>live nodes with 2 or 3 live neighbors live to the next step</li>
+<li>dead nodes with 3 live neighbors spring to life in the next step</li>
+<li>all other nodes die in the next step</li>
+</ul>
+Harsh, but principled.
+<br><br>
+
+Although it's typically played on a 2D infinite Euclidean grid, there's no reason the rules can't to non-euclidean
+topologies.
+<br><br>
+Try it yourself: <code>python -m nx3d life nogui watt</code><br>Requires nx3d 22.10.4 or greater.
+<br><br>
+</p>
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+body {
+  background-color: rgb(0, 0, 0);
+  color: rgb(200, 200, 200);
+  word-wrap: break-word;
+  width: 600px;
+  margin: auto;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+a:link {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+a:visited {
+  color: pink;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:hover {
+  color: red;
+  background-color: transparent;
+  text-decoration: underline;
+}
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: underline;
+}

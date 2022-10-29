@@ -2,13 +2,87 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
-    <title>Everything&#39;s a graph</title>
+    <title>Everything's a graph</title>
   </head>
 <body>
 
-<h1 id="everything-s-a-graph">Everything&#39;s a graph</h1>
+<h1 id="everything-s-a-graph">Everything's a graph</h1>
 
 My name's Eric. Welcome to my blog.
+
+<h2>Graphs can be learned</h2>
+
+<ul>
+<li>date: October 31, 2022</li>
+<li>data uid: e4dd05</li>
+</ul>
+
+<h2>Introduction</h2>
+Shchur et al. 2019
+<a href="https://arxiv.org/abs/1811.05868">arXiv:1811.05868</a>
+provide a clear-eyed set of pitfalls to avoid when developing with graph neural nets. Two prominent point stand out:
+
+<ol>
+<li>Sometimes smaller nets do better</li>
+<li>Don't cherry-pick the training runs you report</li>
+</ol>
+
+To set a foundation for more graph stuff, here I'll implement the baseline models they suggest and show how those models
+perform on a simple prediction task.
+
+<h2>Models</h2>
+
+On the first point, I'll endeavour to fit the smallest capable models possible among three basic classes of models:
+<ol>
+<li>A linear model</li>
+<li>A single-layer fully connected neural net</li>
+<li>A single-layer graph convolutional neural net</li>
+</ol>
+
+The neural nets have a single layer and feed into a relu activation. As the RGBA values are each in [0,1], neither input
+nor output embeddings are required.
+
+<h2>Data</h2>
+For a graph G with degree matrix D and adjacency matrix A, a linear diffusion process here is defined recursively as
+Xt+1 = (1-a)Xt + aLXt. The scalar a is the diffusion rate and L = A - D is the graph Laplacian.  I've generated T =
+2048 * 8 observations of this process on the Bull graph using a diffusion rate of a=0.03. Each Xt is a 4-channel
+2-tensor holding the RGBA values for each node's color. The alpha channel is held constant at 1 and the three channels
+are initialized independently from U[0,1]. After 8 steps, the colors are re-initialized.
+
+<h1> TODO replay </h1>
+
+The dataset consists of 16,384 observations (x=Xt, y=Xt+1). The average color change ∆=sum(|x-y|)/len(G) between steps
+are plotted below:
+
+<img
+  src="static/diffusion-delta-16384.png"
+  alt="raw diffusion training data deltas"
+  class="center"
+/>
+<br>
+
+The raw observations in this dataset are heavily skewed towards smaller changes - in the second half of the simulation,
+most colors are similar. There's a bump at 0.07 - those observations are the re-initializations - they are removed in
+the processed dataset.
+
+<h2>Training</h2>
+
+The spaghetti loss plots below show the train and test mean squared error falling as the models each learn the dataset.
+
+<h3>Linear model</h3>
+
+
+<h2>Appendix</h2>
+The full set of experimental parameters are captured here:
+<h1>TODO report; config</h1>
+<code>
+asdf
+  qwer
+</code>
+
+
+
+
 
 <h2>Older posts</h2>
 <h3 id="2022-10-12"><a href="blog2.html">October 12, 2022</a></h3>

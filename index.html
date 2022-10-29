@@ -9,53 +9,57 @@
 <h1 id="everything-s-a-graph">Everything's a graph</h1>
 
 My name's Eric. Welcome to my blog.
+<!--  -->
+<!-- <h1>Brains are graphs</h3> -->
+<!--  -->
+<!-- <h2>October 31, 2022</h2> -->
+<!--  -->
+<!-- <h1> TODO </h1> -->
+<!--  -->
+<!-- <ol> -->
+<!-- <li>brain obj mesh pyvista nx graph with pos</li> -->
+<!-- <li>life on brain</li> -->
+<!-- <li>3-channel and 5-channel models to show that further reduction in parameterization degrades fit badly</li> -->
+<!-- </ol> -->
+<!--  -->
+<h2>October 29, 2022</h2>
 
-<h2>October 31, 2022</h2>
-
-Happy Halloween!
-
-<h3>Braiiiiins</h3>
-
-<h1> TODO </h1>
-
-<ol>
-<li>brain obj mesh pyvista nx graph with pos</li>
-<li>life on brain</li>
-</ol>
-
-<h2>October 30, 2022</h2>
-
-Hi Mom :) Dad!! Look I'm on the internet <3
-
-<h3>Graphs can learn graphs</h3>
-Models here are represented as graphs of modules.
+Hi Mom, look I'm on the internet.
 
 <h3>Introduction</h3>
 Shchur et al. 2019
 <a href="https://arxiv.org/abs/1811.05868">arXiv:1811.05868</a>
-provide a clear-eyed set of pitfalls to avoid when developing with graph neural nets. Two prominent points stand out:
+provide a clear-eyed set of pitfalls to avoid when developing with graph neural nets. Three admonitions stand out:
 
 <ol>
-<li>Sometimes smaller nets do better</li>
-<li>Remember to replicate and cross validate</li>
+<li>Sometimes simpler, smaller nets do better.</li>
+<li>Remember to replicate and cross validate.</li>
+<li>Tune hyperparameters fairly.</li>
 </ol>
 
-Here I'll implement two of Shchur's baseline models along with an even simpler one, train them on a linear process over
-a small graph, and show evidence in support of the first point using the second.
+In this post, I set a baseline using two of Shchur's three suggested models (MLP, GCN) to fit color diffusion on a
+5-node, 5-edge graph. Along with a linear model, these three classes of models form a gradient of relational
+inductive bias.
+
+<ol>
+<li>The linear model's form contains no representation of the graph's structure; it is not equipped to fit
+nonlinearities.</li>
+<li>The fully connected layer is also unaware of the graph structure, but it <em>can</em> fit piecewise linear
+functions.</li>
+<li>The graph convolutional layer knows the graph structure <em>and</em> comes equipped with relu activation functions.
+</li>
+</ol>
+
+All three should fit well, as their forms match the generative process: the color diffusion is linear and Markov. After
+training on eight 87.5% splits of the data, replicating 4 times each split, the LM and MLP show to outperform the GCN.
+I've not tuned the hyperparameters, though, so YMMV.
 
 <h3>Models</h3>
 
-On the first point, I'll endeavour to fit the smallest capable models possible among three basic classes of models:
-<ol>
-<li>Linear model</li>
-<li>Single-layer fully connected neural net</li>
-<li>Single-layer graph convolutional neural net</li>
-</ol>
-
 The neural nets each have a single layer and feed forward into a relu activation function.
-The GCN is from Kipf and Welling 2016 <a href="https://arxiv.org/abs/1609.02907">arXiv:1609.02907</a>.
-As the RGBA values are all in [0,1], neither input nor output embeddings are required.  None of the models include an
-extra bias term because the alpha channel is 1 everywhere.
+The graph convolution is from Kipf and Welling 2016 <a href="https://arxiv.org/abs/1609.02907">arXiv:1609.02907</a>.
+As the RGBA values are all in [0,1], neither input nor output channel embeddings are required. None of the models
+include an extra bias term because the alpha channel is 1 everywhere.
 
 <h3>Code</h3>
 The Python code for each model is reproduced below:
@@ -111,9 +115,10 @@ The data objects are instances of torch_geometric.Data and F is torch.nn.functio
 <h3>Data</h3>
 For a graph G with degree matrix D and adjacency matrix A, a linear diffusion process here is defined recursively as
 Xt+1 = (1-a)Xt + aLXt. The scalar a is the diffusion rate and L = A - D is the graph Laplacian. Each Xt is a 4-channel
-2-tensor holding the RGBA values for each node's color - the shape is (5, 4). The alpha channel is held constant at 1
-and the three channels are initialized independently from U[0,1]. After 8 steps, the colors are re-initialized.
+2-tensor holding the RGBA values for each node's color - the shape is (5, 4). The and the three channels are initialized
+independently as samples from U[0,1]. After 8 steps, the colors are re-initialized.
 
+<br><br>This is a visualization of the dataset:
 <img
   src="static/diffusion-train-data.gif"
   alt="raw diffusion training data deltas render"
@@ -121,8 +126,7 @@ and the three channels are initialized independently from U[0,1]. After 8 steps,
 />
 <br>
 
-
-The dataset consists of 16,384 observations (x=Xt, y=Xt+1). The average color change ∆=sum(|x-y|)/len(G) between steps
+There are 16,384 observations (x=Xt, y=Xt+1). The average color change ∆=sum(|x-y|)/len(G) between steps
 are plotted below:
 
 <img
@@ -132,14 +136,14 @@ are plotted below:
 />
 <br>
 
-The raw observations in this dataset are heavily skewed towards smaller changes - in the second half of the simulation,
-most colors are similar. There's a bump at 0.07 - those observations are the re-initializations - they are removed in
-the processed dataset.
+Raw observations in this dataset are heavily skewed towards smaller changes - in the second half of the simulation,
+most colors are nearly identical. There's a bump at 0.07 due to periodic re-initialization. After I've removed these
+re-initialization steps in pre-processing, the models train on the remaining 14,750-or-so ∆s.
 
 <h3>Training</h3>
 
-<h4>Visualization of model snapshots</h4>
-The following gifs show GCN model's RBG predictions over the course of training. The alpha channel is fixed at 1.
+The following gifs show the graph convolution model's RBG predictions over the course of training. The alpha channel is
+fixed at 1.
 
 <h3>gcn before any training</h3>
 The model parameters are initialized near zero - the following are model predictions from the GCN before training:
@@ -168,12 +172,10 @@ The model parameters are initialized near zero - the following are model predict
 
 
 <h4>Results</h4>
-
-The spaghetti plots below show the train and test loss falling as the models each learn the dataset.
-8-fold cross validation is used and each run is replicated 4 times, resulting in 32 noodles for each model. The
-test error is calculated 12 times over the course of 96 training epochs, averaged over each element of the validation
-set. No optimizer hyperparameters are systematically tuned; I just picked adam with lr=0.02 and wd=5e-4 after some
-tinkering.
+The spaghetti plots below show the train and test loss falling as the models each learn the dataset, without batch
+normalization. As 8 cross validation splits are used and each run is replicated 4 times, the plot has 32 noodles per
+training card.  The test error is calculated over the test set 12 times over the course of 96 training epochs.
+After some minimal tinkering, the Adam optimizer with lr=0.02 and wd=5e-4 seem to work well enough.
 
 <h3>linear model</h3>
 <img
@@ -204,14 +206,14 @@ tinkering.
 />
 <br>
 
-<h3>Summary</h3>
+<h3></h3>
 
-Train and test error appear correlated; I haven't plotted the blocked replication and train/test split
-effects, but on the whole, for 87.5% of the training runs,
+Without an examination of the replication and train/test split effects, for 87.5% of the training runs, the mean squared
+error fell to within
 <ul>
-<li>The training MSE fell to [0.006, 0.02] using the linear model.</li>
-<li>The training MSE fell to [0.004, 0.18] using the multi-layer perceptron.</li>
-<li>The training MSE fell to [0.017, 0.03] using the graph convolutional layer.</li>
+<li>[0.006, 0.02] using the linear model</li>
+<li>[0.004, 0.18] using the multi-layer perceptron</li>
+<li>[0.017, 0.03] using the graph convolutional layer.</li>
 </ul>
 
 In this baseline case, the best relational inductive bias is the naieve one.
@@ -285,7 +287,7 @@ weight_decay = 0.0005
 </code>
 </pre>
 
-<h2>Older posts</h2>
+<h2>Earlier posts</h2>
 <h3 id="2022-10-12"><a href="blog2.html">October 12, 2022</a></h3>
 <h3 id="2022-10-02"><a href="blog1.html">October 2, 2022</a></h3>
 <h3 id="2022-10-01"><a href="blog0.html">October 1, 2022</a></h3>

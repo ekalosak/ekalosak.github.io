@@ -58,7 +58,7 @@ outperform the GCN. I've not tuned the hyperparameters, though, so YMMV.
 
 The neural nets each have a single layer and feed forward into a relu activation function.
 The graph convolution is from Kipf and Welling 2016 <a href="https://arxiv.org/abs/1609.02907">arXiv:1609.02907</a>.
-Neither input nor output channel embeddings are required. The RGBA values are all within [0,1]. None of the models
+Neither input nor output channel embeddings are used, as such. The RGBA values are all within [0,1]. None of the models
 include an extra bias term because the alpha channel is fixed at 1 everywhere.
 
 <h3>Code</h3>

@@ -38,8 +38,8 @@ provide a clear-eyed set of pitfalls to avoid when developing with graph neural 
 </ol>
 
 In this post, I set a baseline using two of Shchur's three suggested models (MLP, GCN) to fit color diffusion on a
-5-node, 5-edge graph. Along with a linear model, these three classes of models form a gradient of relational
-inductive bias.
+5-node, 5-edge graph. Along with a linear model, these three classes of models form a gradient of "additional
+architecture" or inductive bias.
 
 <ol>
 <li>The linear model's form contains no representation of the graph's structure; it is not equipped to fit
@@ -50,9 +50,9 @@ functions.</li>
 </li>
 </ol>
 
-All three should fit well, as their forms match the generative process: the color diffusion is linear and Markov. After
-training on eight 87.5% splits of the data, replicating 4 times each split, the LM and MLP show to outperform the GCN.
-I've not tuned the hyperparameters, though, so YMMV.
+All three should fit well, as their forms match the generative process: the color diffusion is a linear, Markov
+1-filter. After training on eight 87.5% splits of the data, replicating 4 times each split, the LM and MLP show to
+outperform the GCN. I've not tuned the hyperparameters, though, so YMMV.
 
 <h3>Models</h3>
 

@@ -115,7 +115,7 @@ The data objects are instances of torch_geometric.Data and F is torch.nn.functio
 <h3>Data</h3>
 For a graph G with degree matrix D and adjacency matrix A, a linear diffusion process here is defined recursively as
 Xt+1 = (1-a)Xt + aLXt. The scalar a is the diffusion rate and L = A - D is the graph Laplacian. Each Xt is a 4-channel
-2-tensor holding the RGBA values for each node's color - the shape is (5, 4). The and the three channels are initialized
+2-tensor holding the RGBA values for each node's color - the shape is (5, 4). The three channels are initialized
 independently as samples from U[0,1]. After 8 steps, the colors are re-initialized.
 
 <br><br>This is a visualization of the dataset:
@@ -211,9 +211,9 @@ After some minimal tinkering, the Adam optimizer with lr=0.02 and wd=5e-4 seem t
 Without an examination of the replication and train/test split effects, for 87.5% of the training runs, the mean squared
 error fell to within
 <ul>
-<li>[0.006, 0.02] using the linear model</li>
-<li>[0.004, 0.18] using the multi-layer perceptron</li>
-<li>[0.017, 0.03] using the graph convolutional layer.</li>
+<li>[0.006, 0.020] using the linear model</li>
+<li>[0.004, 0.018] using the multi-layer perceptron</li>
+<li>[0.017, 0.030] using the graph convolutional layer.</li>
 </ul>
 
 In this baseline case, the best relational inductive bias is the naive one.

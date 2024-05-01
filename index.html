@@ -44,24 +44,28 @@
   On with the tech!
 </p>
 
-<h1>I. Introduction</h1>
-<h3>I.a. Why: My ancient macbook can’t do Bevy dev locally.</h3>
+<h1>Introduction</h1>
+<h3>A. Why: My ancient macbook can’t do Bevy dev locally.</h3>
 <p>
   See the related GitHub issues in the sources below for details on the shader
   translation error necessitating a workaround.
+  <ul>
+    <li>https://github.com/bevyengine/bevy/issues/10849</li>
+    <li>https://github.com/gfx-rs/wgpu/issues/4817</li>
+  </ul>
 </p>
-<h3>I.b. Goal: <i>productive</i> Bevy dev on a remote box.</h3>
+<h3>B. Goal: <i>productive</i> Bevy dev on a remote box.</h3>
 <p>
-  It's not as straightforward as forwarding a tty over ssh - game development
-  requires graphics.
+  Game dev's workflow requirements are not as straightforward as other development: game development requires graphics, not just a terminal.
 </p>
-<h3>I.c. Alternatives: tried (1-3) or considered (4-6):</h3>
+<h3>C. Alternatives: tried (1-3) or considered (4-6):</h3>
 
 <ol>
   <li>wasm
     <ul>
+      <li>works! for how, see footnotes.</li>
       <li>easy on a remote box: compile, transpile, serve a webpage; works!</li>
-      <li>but way to slow compile cycle for productive dev</li>
+      <li>but slow compile cycle</li>
       <li>dyamic linking not supported for bevy wasm (see <a href="https://bevy-cheatbook.github.io/platforms/wasm.html#additional-caveats">Unofficial Bevy Cheat Book</a>.)</li>
     </ul>
   </li>
@@ -100,7 +104,8 @@
 
 <!-- START CURRENT WORK -->
 <hr>
-<h1>tl;dr - simple remote desktop implementation</h1>
+<h1>tl;dr</h1>
+<h2>simple remote desktop implementation</h2>
 <p>
   ⏱about 1 hour, assuming you have an AWS account already.<br>
   💵less than $0.25; hourly t2.large was $0.1 at time of writing.</br>
@@ -122,12 +127,15 @@
   🏁
 </p>
 
-<h3>I  🍳 Launch Ubuntu t2.large on AWS</h3>
+<h1>Guide<h1>
+
+<h3>I  🥚 Launch Ubuntu t2.large on AWS</h3>
 <img src="static/blog-5/aws-ec2-console.png">
 <p>
   I’ve found it’s ok, but you could go for an xlarge or c family and be happier.
   I put 64GiB EBS on it.
-  All other default options are ok, just make sure you have SSH access in the SG.
+  All other default options are ok, just make sure you have SSH access in the SG.<br>
+  🍳
 </p>
 
 <h3>II  📦 Install dependencies on remote host</h3>
@@ -145,7 +153,7 @@ sudo apt install -y lxde
 ```
     </pre>
   </code>
-  Once everything is installed <em>reboot the Ubuntu instance</em>.
+  Once everything is installed <em>reboot the Ubuntu instance</em> 📦♻️.
 </p>
 
 <h3>III     📡 Start the VNC server</h3>
@@ -169,13 +177,14 @@ This is the expected output for starting the VNC server:
 <img src="static/blog-5/terminal-vncserver-start.png">
 <p>
   You can see the vnc servers with<br><code>`vncserver -list`</code><br> and kill with<br><code>`vncserver -kill :1`</code><br>
-  Go ahead and leave this terminal with the SSH connection open.
+  Go ahead and leave this terminal with the SSH connection open.📡🫀
 </p>
 
 <h3>IV    🖥 Connect to the remote desktop</h3>
 Run the built-in “Screen Sharing” remote desktop app.<br>
 Put in “localhost:5901” and the password you put into `vncpasswd`.
-<img src="static/blog-5/screen-sharing-launch.png">
+<img src="static/blog-5/screen-sharing-launch.png"><br>
+🖥👁
 
 
 <h3>V    🏗 Build and launch the Bevy example</h3>
@@ -189,41 +198,44 @@ cargo run --example bloom_3d
 ```
   </code></pre>
   The expected result and endpoint of the runbook is:
-  <img max-height:100%; max-width:100%; src="static/blog-5/demo-result.png">
+  <img max-height:100%; max-width:100%; src="static/blog-5/demo-result.png"><br>
+  🏗🍭
 </p>
-
-Apx A: Tricks
-- XRandR error is solved with `ssh -Y` rather than `ssh -X`
-    - As long as you are only one with access to remotehost, this is fine.
-
-Apx B: Errors remain
-3d rendering library complains but never ended up bricking anything:
-- “MESA: error: ZINK: failed to choose pdev”
-- “libEGL warning: egl: failed to create dri2 screen”
-
-Sources:
-In no particular order - hopefully some warry soul finds a clue here!
-- How to set up and connect to VNC
-    - https://dev.to/byteshiva/maximizing-productivity-with-tigervnc-a-guide-to-remote-desktop-solutions-576n
-    - https://documentation.ubuntu.com/aws/en/latest/aws-how-to/instances/launch-ubuntu-desktop/
-    - https://www.cyberciti.biz/faq/install-and-configure-tigervnc-server-on-ubuntu-18-04/
-    - https://forums.fast.ai/t/vnc-server-rfb-003-008/14607/3
-    - https://parth-vijay.medium.com/configure-vnc-server-ac35c2ab049b
-    - https://www.nodinrogers.com/post/2021-11-15-connecting-to-ubuntu-via-vnc-default-wm/
-- Clued me in to LXDE
-    - https://medium.com/@S3CloudHub./how-to-setup-gui-on-amazon-ec2-ubuntu-server-f07ecb9c7b9b
-- Fix to the XRandR error
-    - https://www.techpowerup.com/forums/threads/ssh-x-from-mac-os-to-ubuntu-error-with-randr.261645/
-- Motivating GitHub issues
-    - https://github.com/bevyengine/bevy/issues/10849
-    - https://github.com/gfx-rs/wgpu/issues/4817
-
-
 
 <hr>
 <!-- END CURRENT WORK -->
 
-<h2>Claims; sources</h2>
+<h2>📚 Sources</h2>
+<p>
+  In no particular order - hopefully some warry soul finds a clue here!
+  <ul>
+  <li>How to set up and connect to VNC
+    <ol>
+      <li>https://dev.to/byteshiva/maximizing-productivity-with-tigervnc-a-guide-to-remote-desktop-solutions-576n</li>
+      <li>https://documentation.ubuntu.com/aws/en/latest/aws-how-to/instances/launch-ubuntu-desktop/</li>
+      <li>https://www.cyberciti.biz/faq/install-and-configure-tigervnc-server-on-ubuntu-18-04/</li>
+      <li>https://forums.fast.ai/t/vnc-server-rfb-003-008/14607/3</li>
+      <li>https://parth-vijay.medium.com/configure-vnc-server-ac35c2ab049b</li>
+      <li>https://www.nodinrogers.com/post/2021-11-15-connecting-to-ubuntu-via-vnc-default-wm/</li>
+  </ol></li>
+  <li>Clued me in to LXDE
+    <ul>
+      <li>https://medium.com/@S3CloudHub./how-to-setup-gui-on-amazon-ec2-ubuntu-server-f07ecb9c7b9b</li>
+  </ul></li>
+  <li>Fix to the XRandR error
+    <ul>
+      <li>https://www.techpowerup.com/forums/threads/ssh-x-from-mac-os-to-ubuntu-error-with-randr.261645/</li>
+      <li>XRandR error is solved with `ssh -Y` rather than `ssh -X`</li>
+      <li>As long as you are only one with access to remotehost, this is fine.</li>
+  </ul></li>
+  <li>Motivating GitHub issues
+    <ul>
+      <li>https://github.com/bevyengine/bevy/issues/10849</li>
+      <li>https://github.com/gfx-rs/wgpu/issues/4817</li>
+  </ul></li>
+</ul>
+
+<h2>📑 Footnotes</h2>
 <ol>
   <li>Cross-platform compilation on Ubuntu to x86_64-apple-darwin doesn't work.
     <ul>
@@ -235,42 +247,55 @@ In no particular order - hopefully some warry soul finds a clue here!
   <li>WASM transpilation works and is straightforward
   <ul>
     <li>See the <a href="https://bevy-cheatbook.github.io/platforms/wasm.html#browser-webassembly">Unofficial Bevy Cheat Book</a>.
-      <li>Here's my wasm complile -> transpile phony:<br>
+      <li>Here's my wasm complile -> transpile make phony:<br>
         <code>
           <pre>
-          build-wasm:
-            @echo "🏎	Build start."
-            @date
-            @echo "📦	Compiling Rust code..."
-            cargo build \
-              --profile wasm-release \
-              --timings \
-              --target wasm32-unknown-unknown
-            @echo "🏗	Generating WASM..."
-            wasm-bindgen --out-name waste \
-              --out-dir web/target/wasm \
-              --target web target/wasm32-unknown-unknown/wasm-release/waste.wasm
-            @echo "🏁	Build complete."
-            @date
+```Makefile
+build-wasm:
+  @echo "🏎	Build start."
+  @date
+  @echo "📦	Compiling Rust code..."
+  cargo build \
+    --profile wasm-release \
+    --timings \
+    --target wasm32-unknown-unknown
+  @echo "🏗	Generating WASM..."
+  wasm-bindgen --out-name waste \
+    --out-dir web/target/wasm \
+    --target web target/wasm32-unknown-unknown/wasm-release/waste.wasm
+  @echo "🏁	Build complete."
+  @date
+```
           </pre>
         </code>
   </li>
+</ul>
+<li>The 3d rendering libraries complain but never ended up bricking anything:
+  <ol>
+    <li>“MESA: error: ZINK: failed to choose pdev”</li>
+    <li>“libEGL warning: egl: failed to create dri2 screen”</li>
+  </ol>
+</li>
+</p>
+
+
+
+
 </ol>
 
 
 
 <hr>
-<p>Thanks for reading - if you're interested, I've got a couple other posts.</p>
-<h2>Earlier posts</h2>
-<h3 id="2023-09-29"><a href="blog4.html">September 29, 2023</a></h3>
-<h3 id="2022-10-29"><a href="blog3.html">October 29, 2022</a></h3>
-<h3 id="2022-10-12"><a href="blog2.html">October 12, 2022</a></h3>
-<h3 id="2022-10-02"><a href="blog1.html">October 2, 2022</a></h3>
-<h3 id="2022-10-01"><a href="blog0.html">October 1, 2022</a></h3>
+<p>If you're interested, I've got a couple other posts.</p>
+<h4 id="2023-09-29"><a href="blog4.html">September 29, 2023</a></h4>
+<h4 id="2022-10-29"><a href="blog3.html">October 29, 2022</a></h4>
+<h4 id="2022-10-12"><a href="blog2.html">October 12, 2022</a></h4>
+<h4 id="2022-10-02"><a href="blog1.html">October 2, 2022</a></h4>
+<h4 id="2022-10-01"><a href="blog0.html">October 1, 2022</a></h4>
 
 <hr>
 <p>
-  License: MIT
+  License: MIT; Author: Eric Kalosa-Kenyon (2024); Find me on <a href="https://github.com/ekalosak">GitHub</a>;
 </p>
 
 </body>

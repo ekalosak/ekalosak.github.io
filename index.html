@@ -135,47 +135,62 @@
   In corresponding order to the tl;dr:
   <code>
     <pre>
-      ```sh
-      sudo apt update -y
-      sudo apt install -y xorg libxkbcommon-x11-dev
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-      sudo apt install -y build-essential pkg-config libasound2-dev libudev-dev
-      sudo apt install -y tigervnc-standalone-server tigervnc-xorg-extension tigervnc-viewer
-      sudo apt install -y lxde
-      ```
+```sh
+sudo apt update -y
+sudo apt install -y xorg libxkbcommon-x11-dev
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt install -y build-essential pkg-config libasound2-dev libudev-dev
+sudo apt install -y tigervnc-standalone-server tigervnc-xorg-extension tigervnc-viewer
+sudo apt install -y lxde
+```
     </pre>
   </code>
   Once everything is installed <em>reboot the Ubuntu instance</em>.
 </p>
 
-📡III Start the VNC server
-Open an SSH connection to remote host and bind the 5901 port to localhost.
+<h3>III     📡 Start the VNC server</h3>
+<p>
+  Open an SSH connection to remote host and bind the 5901 port to localhost.
+  <code><pre>
 ```sh
-ssh user@host -L 5901:127.0.0.1:5901
+ssh ubuntu@ec2-[network-addr] -L 5901:127.0.0.1:5901
 ```
-Then, on the remote box, start the VNC server.
-First, you will need to set a password.
+  </code></pre>
+  Then, on the remote box, start the VNC server.<br>
+  First, you will need to set a password.
+  <code><pre>
 ```sh
 vncpasswd
 vncserver -xstartup /usr/bin/lxsession
 ```
-^ you can see the vnc servers with `vncserver -list` and kill with `vncserver -kill :1`.
-Go ahead and leave this terminal with the SSH connection open.
-￼
+  </code></pre>
+This is the expected output for starting the VNC server:
+</p>
+<img src="static/blog-5/terminal-vncserver-start.png">
+<p>
+  You can see the vnc servers with<br><code>`vncserver -list`</code><br> and kill with<br><code>`vncserver -kill :1`</code><br>
+  Go ahead and leave this terminal with the SSH connection open.
+</p>
 
-🖥IV Connect to the remote desktop
-Run the built-in “Screen Sharing” remote desktop app.
+<h3>IV    🖥 Connect to the remote desktop</h3>
+Run the built-in “Screen Sharing” remote desktop app.<br>
 Put in “localhost:5901” and the password you put into `vncpasswd`.
-￼
+<img src="static/blog-5/screen-sharing-launch.png">
 
-🏗V Build and launch the Bevy example
-Reproduced with modification from https://bevyengine.org/learn/quick-start/getting-started/#try-the-examples
+
+<h3>V    🏗 Build and launch the Bevy example</h3>
+<p>
+  Reproduced with modification from <a href="https://bevyengine.org/learn/quick-start/getting-started/#try-the-examples">the bevy example list</a>:
+  <code><pre>
 ```sh
 git clone https://github.com/bevyengine/bevy
 cd bevy
 cargo run --example bloom_3d
 ```
-￼
+  </code></pre>
+  The expected result and endpoint of the runbook is:
+  <img max-height:100%; max-width:100%; src="static/blog-5/demo-result.png">
+</p>
 
 Apx A: Tricks
 - XRandR error is solved with `ssh -Y` rather than `ssh -X`

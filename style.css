@@ -5,6 +5,10 @@ body {
   width: 600px;
   margin: auto;
 }
+img {
+  max-width: 100%; /* Make the image take the width of the container */
+  height: auto; /* Maintain aspect ratio */
+}
 .center {
   display: block;
   margin-left: auto;

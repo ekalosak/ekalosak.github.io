@@ -13,6 +13,46 @@ My name's Eric. Welcome to my blog. 😊
 <hr>
 <h2>How to Bevy when your macbook can't</h2>
 <h3>April 30, 2024</h3>
+<h4>Some personal motivation</h4>
+<p>
+  What better way to learn more about a language than to write a game in it?
+  It's fun, creative, and complex enough to get you below the surface level
+  language features. Rust is cool, I'm skilling up in it, (unrelated but)
+  <a href="https://pola.rs/"></a>Polars</a> alone is enough of a reason for an
+  MLE to get involved. And on the search for a framework,
+  <a href="https://bevyengine.org/">Bevy</a> stood out.<br>
+  Bevy is, from their homepage, a "refreshingly simple data-driven game engine
+  built in Rust". It uses native structs and has a mental model that is pretty
+  easy to "get dangerous" with. Awesome!<br><br>
+  But not so fast. My ancient macbook can't run any of even the simplest
+  examples from Bevy's extensive list. Great sad. After a few months ruminating
+  on this issue, trying other projects here and there to salve the Bevy-shaped
+  ache in my heart, I decided to bash my head against it.<br>
+  By some miracle (i.e. with lots of blog posts by those more skilled than I) it worked.
+</p>
+
+<h4>Introduction</h4>
+Goal: Bevy dev on a remote box
+Why: My ancient macbook can’t do Bevy dev locally
+Alternatives:
+- wasm
+    - easy on a remote box: compile, transpile, serve a webpage; works!
+    - but way to slow compile cycle for productive dev
+    - dyamic linking not supported for bevy wasm
+- transpile
+    - simply doesn’t work on Ubuntu with `rustup target add x86_64-apple-darwin`
+    - would have to have an scp in the loop
+    - who knows how that looks with DLLs in the mix
+- x11 forwarding
+    - native development loop
+    - complexity
+    - lag
+- buy a new macbook
+    - no, too expensive & wasteful
+- compile on mac1.metal ec2 instance
+    - those things are $1/hr, no thanks
+- dual boot linux
+    - attractive option but I don’t mess with my command center like that
 
 <hr>
 <h2>Earlier posts</h2>

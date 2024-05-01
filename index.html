@@ -1,66 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
     <title>Everything's a graph</title>
   </head>
 <body>
 
-<h1 id="everything-s-a-graph">Everything's a graph</h1>
-
-My name's Eric. Welcome to my blog. 😊
-
-<hr>
-<h2>How to Bevy when your macbook can't</h2>
-<h3>April 30, 2024</h3>
-<h4>Some personal motivation</h4>
+<h4>April 30, 2024</h4>
 <p>
-  What better way to learn more about a language than to write a game in it?
-  It's fun, creative, and complex enough to get you below the surface level
-  language features. Rust is cool, I'm skilling up in it, (unrelated but)
-  <a href="https://pola.rs/"></a>Polars</a> alone is enough of a reason for an
-  MLE to get involved. And on the search for a framework,
-  <a href="https://bevyengine.org/">Bevy</a> stood out.<br>
-  Bevy is, from their homepage, a "refreshingly simple data-driven game engine
-  built in Rust". It uses native structs and has a mental model that is pretty
-  easy to "get dangerous" with. Awesome!<br><br>
-  But not so fast. My ancient macbook can't run any of even the simplest
-  examples from Bevy's extensive list. Great sad. After a few months ruminating
-  on this issue, trying other projects here and there to salve the Bevy-shaped
-  ache in my heart, I decided to bash my head against it.<br>
-  By some miracle (i.e. with lots of blog posts by those more skilled than I) it worked.
+  My name's Eric. Welcome to my blog. 😊
 </p>
 
-<h4>Introduction</h4>
-Goal: Bevy dev on a remote box
-Why: My ancient macbook can’t do Bevy dev locally
-Alternatives:
-- wasm
-    - easy on a remote box: compile, transpile, serve a webpage; works!
-    - but way to slow compile cycle for productive dev
-    - dyamic linking not supported for bevy wasm
-- transpile
-    - simply doesn’t work on Ubuntu with `rustup target add x86_64-apple-darwin`
-    - would have to have an scp in the loop
-    - who knows how that looks with DLLs in the mix
-- x11 forwarding
-    - native development loop
-    - complexity
-    - lag
-- buy a new macbook
-    - no, too expensive & wasteful
-- compile on mac1.metal ec2 instance
-    - those things are $1/hr, no thanks
-- dual boot linux
-    - attractive option but I don’t mess with my command center like that
+<hr>
+<h1>How to Bevy when your macbook can't</h1>
+<p>
+  A guide to productive game development in Rust when your machine can't keep up.
+</p>
+<h4>Some personal motivation</h4>
+<p>
+  What better way to get better at a programming language than to write a game
+  in it?  It's fun, creative, and complex enough to get you below the surface
+  level language features. Rust makes me think, and (unrelated to the rest of
+  this post but) <a href="https://pola.rs/">Polars</a> alone is enough of a
+  reason for an MLE to get involved.<br> So - Rust, games.<br><br>
+  On the search for a framework,
+  <a href="https://bevyengine.org/">Bevy</a> stood out.<br>
+  From their homepage, Bevy is a "refreshingly simple data-driven game engine
+  built in Rust". It uses native structs and has a mental model that is pretty
+  easy to "get dangerous" with.<br>
+  Clean, crisp, awesome!<br><br>
+  But not so fast.<br>
+  My ancient macbook can't run any of even the simplest
+  examples from Bevy's <a href="https://bevyengine.org/examples/">extensive
+  list</a>. Great sad. After a few months ruminating on this issue, trying
+  other projects here and there to salve the Bevy-shaped ache in my brain, this
+  time around I found some
+  success.<br><br>
+  By some miracle (i.e. with lots of help from blog posts by those more skilled
+  than I,) I found a productive remote development workflow. With that ethos at
+  heart, I'll leave this attempt at a guide in hopes that it helps at least one
+  other interested tinkerer.<br>
+  On with the tech!
+</p>
+
+<h1>Introduction</h1>
+<h3>Why: My ancient macbook can’t do Bevy dev locally.</h3>
+<p>
+  See the related GitHub issues in the sources below for details on the shader
+  translation error necessitating a workaround.
+</p>
+<h3>Goal: <i>productive</i> Bevy dev on a remote box.</h3>
+<p>
+  It's not as straightforward as forwarding a tty over ssh - game development
+  requires graphics.
+</p>
+<h3>Alternatives: tried (1-3) or considered (4-6):</h3>
+
+<ol>
+  <li>wasm
+    <ul>
+      <li>easy on a remote box: compile, transpile, serve a webpage; works!</li>
+      <li>but way to slow compile cycle for productive dev</li>
+      <li>dyamic linking not supported for bevy wasm (see <a href="https://bevy-cheatbook.github.io/platforms/wasm.html#additional-caveats">Unofficial Bevy Cheat Book</a>.)</li>
+    </ul>
+  </li>
+  <li>transpile
+    <ul>
+      <li>simply doesn’t work on Ubuntu with `rustup target add x86_64-apple-darwin`</li>
+      <li>would have to have an scp in the loop</li>
+      <li>who knows how that looks with DLLs in the mix</li>
+    </ul>
+  </li>
+  <li>x11 forwarding
+    <ul>
+      <li>native development loop</li>
+      <li>complexity of solution</li>
+      <li>visual lag when running game</li>
+    </ul>
+  </li>
+  <li>compile on mac1.metal ec2 instance
+    <ul>
+      <li>those things are $1/hr, no thanks</li>
+      <li>suffers from same other issues as the transpile alternative</li>
+    </ul>
+  </li>
+  <li>buy a new macbook
+    <ul>
+      <li>no, too expensive & wasteful</li>
+    </ul>
+  </li>
+  <li>dual boot linux
+    <ul>
+      <li>attractive option but I don’t mess with my command center like that</li>
+      <li>I have other projects going in the mac native environment, context switching would be painful</li>
+    </ul>
+  </li>
+</ol>
+
+
+<h2>Claims; sources</h2>
+<ol>
+  <li>Transpile on Ubuntu to x86_64-apple-darwin doesn't work.
+    <ul>
+      <li><a href="https://github.com/gfx-rs/wgpu/issues/2956">GitHub issue for gfx-rs</a> claims it's fixed.</li>
+      <li><a href="https://github.com/SSheldon/rust-objc-exception/issues/13">GitHub issue for related project</a> on same problem remains open.</li>
+      <li>I ran into this issue myself on latest versions of Rust toolchain & source code on a vanilla Ubuntu EC2 box (Apr 29, 2024).</li>
+    </ul>
+  </li>
+  <li>WASM transpilation works and is straightforward
+  <ul>
+    <li>See the <a href="https://bevy-cheatbook.github.io/platforms/wasm.html#browser-webassembly">Unofficial Bevy Cheat Book</a>.
+      <li>Here's my wasm complile -> transpile phony:<br>
+        <code>
+          <pre>
+          build-wasm:
+            @echo "🏎	Build start."
+            @date
+            @echo "📦	Compiling Rust code..."
+            cargo build \
+              --profile wasm-release \
+              --timings \
+              --target wasm32-unknown-unknown
+            @echo "🏗	Generating WASM..."
+            wasm-bindgen --out-name waste \
+              --out-dir web/target/wasm \
+              --target web target/wasm32-unknown-unknown/wasm-release/waste.wasm
+            @echo "🏁	Build complete."
+            @date
+          </pre>
+        </code>
+  </li>
+</ol>
+
+
 
 <hr>
+<p>Thanks for reading - if you're interested, I've got a couple other posts.</p>
 <h2>Earlier posts</h2>
 <h3 id="2023-09-29"><a href="blog4.html">September 29, 2023</a></h3>
 <h3 id="2022-10-29"><a href="blog3.html">October 29, 2022</a></h3>
 <h3 id="2022-10-12"><a href="blog2.html">October 12, 2022</a></h3>
 <h3 id="2022-10-02"><a href="blog1.html">October 2, 2022</a></h3>
 <h3 id="2022-10-01"><a href="blog0.html">October 1, 2022</a></h3>
+
+<hr>
+<p>
+  License: MIT
+</p>
 
 </body>
 </html>
